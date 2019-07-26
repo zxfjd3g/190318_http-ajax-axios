@@ -12,8 +12,11 @@
     3). headers: 多个请求头
         Host: www.baidu.com
         Cookie: BAIDUID=AD3B0FA706E; BIDUPSID=AD3B0FA706;
-        Content-Type: application/x-www-form-urlencoded
+        Content-Type: application/x-www-form-urlencoded / application/json
     4). body: 请求体
+        username=tom&pwd=123
+        {"username": "tom", "pwd": 123}
+
     
 ### 4. HTTP响应报文
     1). 响应状态码: 200/404
