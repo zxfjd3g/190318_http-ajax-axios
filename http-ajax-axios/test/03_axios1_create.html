@@ -20,37 +20,29 @@
       解决: 创建2个新axios, 每个都有自己特有的配置, 分别应用到不同要求的接口请求中
   */
 
-  const instance = axios.create({
-    baseURL: 'http://localhost:3000'
+  axios.defaults.baseURL = 'http://localhost:4000'
+
+  axios({
+    method: 'GET',
+    url: '/get1',
+    params: {
+      id: 2
+    },
   })
-  const instance2 = axios.create({
-    baseURL: 'http://localhost:4000'
+
+  var instance = axios.create({
+    baseURL: 'http://localhost:5000'
   })
+  instance({
+    method: 'GET',
+    url: '/get1',
+    params: {
+      id: 3
+    },
+  })
+  console.log(axios)
+  console.log(instance)
 
-  /* instance({
-    url: 'http://localhost:3000/posts'
-  }) */
-  // instance('http://localhost:3000/posts')
-  /* instance.request({
-    url: 'http://localhost:3000/posts'
-  }) */
-  instance.request('/posts')
-  // instance.get('http://localhost:3000/posts')
-  
-    .then(response => {
-      console.log(response.data)
-    })
-
-  instance2('/posts', {params: {id: 3}})
-    .then(response => {
-      console.log(response.data)
-    })
-
-
-
- 
-
-  
 </script>
 </body>
 </html>
