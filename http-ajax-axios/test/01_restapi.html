@@ -18,7 +18,7 @@
 
   /* 1. GET请求: 从服务器端获取数据*/
   function testGet() {
-    axios.get('http://localhost:4000/posts') // 获取所有posts的数组
+    // axios.get('http://localhost:3000/posts')
     // axios.get('http://localhost:3000/posts/1') // 获取id为1的对象
     // axios.get('http://localhost:3000/posts?id=1&id=2') // 获取id为1或2的数组
     // axios.get('http://localhost:3000/posts?title=json-server&author=typicode')
@@ -26,17 +26,17 @@
 
   /* 2. POST请求: 向服务器端添加新数据*/
   function testPost() {
-    axios.post('http://localhost:4000/post1', {body: 'xxx', postId: 1}) // 保存数据
+    axios.post('http://localhost:3000/posts', {title: 'xxx', author: 'yyyy'}) // 保存数据
   }
 
   /* 3. PUT请求: 更新服务器端已经数据 */
   function testPut() {
-    // axios.put('http://localhost:3000/comments/6', {body: 'yyy', postId: 1})
+    axios.put('http://localhost:3000/comments/2', {body: 'yyy', postId: 2})
   }
   
   /* 4. DELETE请求: 删除服务器端数据 */
   function testDelete() {
-    // axios.delete('http://localhost:3000/comments/4')
+    axios.delete('http://localhost:3000/comments/2')
   }
   
 </script>

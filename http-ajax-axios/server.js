@@ -10,10 +10,10 @@ app.use(express.urlencoded())
 // 能解析json格式的请求体参数
 app.use(express.json())
 
-/* app.use((req, res, next) => {
-  res.setHeader('Access-Control-Max-Age', -1)
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Max-Age', 60)
   next()
-}) */
+})
 
 app.get('/posts', (req, res) => {
   const {id} = req.query
