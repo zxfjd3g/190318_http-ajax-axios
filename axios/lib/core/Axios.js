@@ -61,6 +61,7 @@ Axios.prototype.request = function request(config) {
   this.interceptors.response.forEach(function pushResponseInterceptors(interceptor) {
     chain.push(interceptor.fulfilled, interceptor.rejected);
   });
+  
 
   // 通过promise的then()串连起所有的请求拦截器/请求方法/响应拦截器
   while (chain.length) {

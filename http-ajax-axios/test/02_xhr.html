@@ -117,6 +117,7 @@
           // 如果成功了, 取出数据封装成成功的响应数据对象response, 调用resolve(response)
           if (status>=200 && status<300) { // 在[200, 300)
             const response = {
+              // data: JSON.parse(request.response),
               data: request.response,
               status,
               statusText

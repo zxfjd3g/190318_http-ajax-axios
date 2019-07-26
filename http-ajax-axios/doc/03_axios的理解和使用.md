@@ -25,6 +25,7 @@
     axios.defaults.xxx: 请求的默认全局配置
     axios.interceptors.request.use(): 添加请求拦截器
     axios.interceptors.response.use(): 添加响应拦截器
+
     axios.create([config]): 创建一个新的axios(它没有下面的功能)
     
     axios.Cancel(): 用于创建取消请求的错误对象

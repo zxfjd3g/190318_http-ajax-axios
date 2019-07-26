@@ -33,7 +33,7 @@
     相同: 
         都是一个能发任意请求的函数: request(config)
         都有发特定请求的各种方法: get()/post()/put()/delete()
-        都有默认匹配和拦截器的属性: defaults/interceptors
+        都有默认配置和拦截器的属性: defaults/interceptors
     不同:
         默认匹配的值很可能不一样
         instance没有axios后面添加的一引起方法: create()/CancelToken()/all()
@@ -43,7 +43,7 @@
 ### 6). dispatchrequest()都做了什么?
 ### 7). xhrAdapter()做了什么?
     整体流程: request(config)  ===> dispatchRequest(config) ===> xhrAdapter(config)
-    request(config): 将请求拦截器 / dispatchRequest() / 响应拦截器 通过promise链串连起来, 依次执行. 返回promise
+    request(config): 将请求拦截器 / dispatchRequest() / 响应拦截器 通过promise链串连起来, 返回promise
     dispatchRequest(config): 转换请求数据 ===> 调用xhrAdapter()发请求 ===> 请求返回后转换响应数据. 返回promise
     xhrAdapter(config): 创建XHR对象, 根据config进行相应设置, 发送特定请求, 并接收响应数据, 返回promise 
 
