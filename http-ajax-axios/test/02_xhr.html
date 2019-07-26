@@ -15,10 +15,10 @@
   <script>
 
     function testGet() {
-      axios2({
+      axios({
         url: 'http://localhost:3000/comments',
         // url: 'http://localhost:3000/comments2',
-        params: {id: 30},
+        params: {id: 3},
       }).then(response => {
         console.log('get success', response.data, response)
       }).catch(error => {
@@ -27,7 +27,7 @@
     }
 
     function testPost() {
-      axios2({
+      axios({
         url: 'http://localhost:3000/comments',
         // url: 'http://localhost:3000/comments2',
         method: 'POST',
@@ -40,9 +40,9 @@
     }
 
     function testPut() {
-      axios2({
-        // url: 'http://localhost:3000/comments/6',
-        url: 'http://localhost:3000/comments/39',
+      axios({
+        url: 'http://localhost:3000/comments/3',
+        // url: 'http://localhost:3000/comments/39',
         method: 'put',
         data: {body: 'abcdefg', "postId": 2}
       }).then(response => {
@@ -53,16 +53,67 @@
     }
     
     function testDelete() {
-      axios2({
-        url: 'http://localhost:3000/comments/35',
+      axios({
+        url: 'http://localhost:3000/comments/1',
         method: 'delete',
         params: {
-          body: 'aaaa'
+          body: 'some comment'
         }
       }).then(response => {
         console.log('delete success', response.data, response)
       }).catch(error => {
         alert(error.message)
+      })
+    }
+
+
+    /*
+    使用XHR封装发送ajax请求的通用函数
+      返回值: promise
+      参数为配置对象
+        url: 请求地址
+        params: 包含所有query请求参数的对象 {name: tom, age: 12} ==> name=tom&age=12
+        data: 包含所有请求体参数数据的对象
+        method: 为请求方式
+    */
+    function axios({url, method='GET', params={}, data={}}) {
+
+      method = method || 'GET'
+      method = method.toUpperCase()
+
+      // 将params中的参数属性拼接到url上   
+      // {name: tom: pwd: 123}  ===> queryStr=name=tom&pwd=123
+      // url + ? + queryStr
+      let queryStr = ''
+      Object.keys(params).forEach(key => {
+        // &pwd=123
+          queryStr += '&' + key + '=' + params[key]
+      })
+      // '&name=tom&pwd=123' 或者 ''
+      if (queryStr) {
+        queryStr = queryStr.substring(1) // 'name=tom&pwd=123'
+        url += '?' + queryStr  // /user?name=tom&pwd=123
+      }
+
+      
+      return new Promise((resolve, reject) => {
+        // 创建XHR对象
+        const request = new XMLHttpRequest()
+
+        // 打开连接(初始化请求对象)
+        request.open(method, url, true)
+
+
+        if (method==='GET' || method==='DELETE') {
+          // 发送请求
+          request.send(null)
+        } else { // POST/PUT
+          // 设置请求头
+          request.setRequestHeader('Content-Type', 'application/json;charset=utf-8')
+          // 发送请求
+          request.send(JSON.stringify(data))
+        }
+        
       })
     }
 
