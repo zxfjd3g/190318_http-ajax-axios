@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <button onclick="testGet()">发送GET请求</button><br>
+  <button onclick="testPost()">发送POST请求</button><br>
+  <button onclick="testPut()">发送PUT请求</button><br>
+  <button onclick="testDelete()">发送Delete请求</button><br>
+
+  <script>
+
+    function testGet() {
+      axios2({
+        url: 'http://localhost:3000/comments',
+        // url: 'http://localhost:3000/comments2',
+        params: {id: 30},
+      }).then(response => {
+        console.log('get success', response.data, response)
+      }).catch(error => {
+        alert(error.message)
+      })
+    }
+
+    function testPost() {
+      axios2({
+        url: 'http://localhost:3000/comments',
+        // url: 'http://localhost:3000/comments2',
+        method: 'POST',
+        data: { body: 'aaaa', postId: 2 }
+      }).then(response => {
+        console.log('post success', response.data, response)
+      }).catch(error => {
+        alert(error.message)
+      })
+    }
+
+    function testPut() {
+      axios2({
+        // url: 'http://localhost:3000/comments/6',
+        url: 'http://localhost:3000/comments/39',
+        method: 'put',
+        data: {body: 'abcdefg', "postId": 2}
+      }).then(response => {
+        console.log('put success', response.data, response)
+      }).catch(error => {
+        alert(error.message)
+      })
+    }
+    
+    function testDelete() {
+      axios2({
+        url: 'http://localhost:3000/comments/35',
+        method: 'delete',
+        params: {
+          body: 'aaaa'
+        }
+      }).then(response => {
+        console.log('delete success', response.data, response)
+      }).catch(error => {
+        alert(error.message)
+      })
+    }
+
+
+    /*
+    使用XHR封装发送ajax请求的通用函数
+      返回值: promise
+      参数为配置对象
+        url: 请求地址
+        params: 包含所有query请求参数的对象   {name: tom, age: 12}  ==> name=tom&age=12
+        data: 包含所有请求体参数数据的对象
+        method: 为请求方式
+    */
+    function axios2({url, method="GET", data={}, params={}}) {
+      return new Promise((resolve, reject) => {
+
+        // 将请求方式转换为大写
+        method = method.toUpperCase()
+
+        // 创建XHR对象
+        const request = new XMLHttpRequest()
+
+        // 根据params生成请求参数字符串, 并拼接到url上
+        // {name: tom, age: 12} ==> name=tom&age=12
+        let queryStr = ''
+        Object.keys(params).forEach(key => {
+          const value = params[key]
+          queryStr += `&${key}=${value}`
+        }) // &name=tom&age=12
+        if (queryStr) {
+          queryStr = queryStr.substring(1) // name=tom&age=12
+          url += '?' + queryStr
+        }
+
+        // 打开连接(初始化一个请求)
+        request.open(method, url, true) // 还没有发请求
+
+        // 指定响应数据必须是json ==> 得到的响应体数据就是已解析好的js对象/数组
+        request.responseType = 'json'
+
+        // 绑定监视状态改变的监听
+        request.onreadystatechange = () => {
+          // 如果请求还未完成, 直接结束
+          if (request.readyState!==4) {
+            return
+          }
+
+          // 请求完成: 成功
+          if (request.status>=200 && request.status<300) {
+            // 准备一个响应数据对象
+            const response = {
+              data: request.response,
+              status: request.status,
+              statusText: request.statusText
+            }
+            // 让请求的promise确定为成功
+            resolve(response)
+          } else { // 请求完成: 失败
+            
+            // 准备一个error对象
+            const error = new Error('request error status: ' + request.status)
+            // 让请求的promise确定为失败
+            reject(error)
+          }
+        }
+
+        // 发送请求
+        if (method==='POST' || method==='PUT') { // POST请求
+          // 设置请求头: 指定请求体为json格式
+          request.setRequestHeader('Content-Type', 'application/json;charset=utf-8')
+          // 发送带数据的请求(数据必须是json)
+          request.send(JSON.stringify(data))
+        } else { // GET/DELETE请求
+          // 发送不带数据的请求请求
+          request.send(null)
+        }
+      })
+    }
+
+  </script>
+</body>
+</html>
