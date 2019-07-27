@@ -17,51 +17,55 @@
     const CancelToken = axios.CancelToken
     let cancel
 
+    
+    axios.interceptors.request.use(config => {
+
+      //在请求发出前取消上一次未完成的请求
+      if(typeof cancel === 'function'){
+        cancel('终止请求'); //取消请求
+      }
+
+      // 配置当前请求的cancelToken, 保存对应的cancel函数
+      config.cancelToken = new CancelToken(function executor(c) {
+        cancel = c;
+      });
+      return config
+    })
+
+    axios.interceptors.response.use(response => {
+      cancel = null
+      return response
+    }, error => {
+      if (axios.isCancel(error)) {
+        console.log(response.config.url + ' Request canceled', error.message)
+        return new Promise(() => {})
+      } else {
+        cancel = null
+        return Promise.reject(error)
+      }
+      
+    })
+
     function getProducts1() {
 
-      if (typeof cancel === 'function') {
-        cancel('请求products1前取消请求')
-      }
 
       axios({
         url: 'http://localhost:4000/products1',
-        cancelToken: new CancelToken((c) => { // c: 用于取消请求的函数
-          // 将取消请求的函数保存到外部, 用于将来调用它取消请求
-          cancel = c
-        })
       }).then(response => {
         cancel = null
         console.log('products1 success', response.data)
       }).catch(error => { // cancel
-        if (axios.isCancel(error)) {
-          console.log('product1 request canceled', error.message)
-        } else {
-           cancel = null
-           console.log('products1 Request error', error.message)
-        }
+        console.log('product1 request canceled', error.message)
       })
     }
 
     function getProducts2() {
-      if (typeof cancel === 'function') {
-        cancel('请求products2前取消请求')
-      }
       axios({
         url: 'http://localhost:4000/products2',
-        cancelToken: new CancelToken((c) => { // c: 用于取消请求的函数
-          // 将取消请求的函数保存到外部, 用于将来调用它取消请求
-          cancel = c
-        })
       }).then(response => {
-        cancel = null
         console.log('products2 success', response.data)
       }).catch(error => {
-        if (axios.isCancel(error)) {
-          console.log('product1 request canceled', error.message)
-        } else {
-          cancel = null
-          console.log('products1 Request error', error.message)
-        }
+         console.log('product1 request canceled', error.message)
       })
     }
 
@@ -72,7 +76,6 @@
       } else {
         console.log("请求已经完成了")
       }
-      
     }
   </script>
 </body>
