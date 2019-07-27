@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>取消最后发送还未完成的请求</title>
 </head>
 <body>
   <button onclick="getProducts1()">获取商品列表1</button><br>
@@ -19,13 +19,13 @@
       axios({
         url: 'http://localhost:4000/products1',
         cancelToken: new CancelToken(c => {
-          cancel = c 
+          cancel = c
         })
       }).then(response => {
         console.log('products1 success', response.data)
       }).catch(error => {
         if (axios.isCancel(error)) {
-          console.log('products1 Request canceled', error.message)
+          console.log('products1 request canceled', error.message)
         } else {
           console.log('products1 Request error', error.message)
         }
@@ -39,6 +39,7 @@
           cancel = c
         })
       }).then(response => {
+        cancel = null
         console.log('products2 success', response.data)
       }).catch(error => {
         if (axios.isCancel(error)) {
@@ -46,11 +47,15 @@
         } else {
           console.log('products2 Request error', error.message)
         }
+        cancel = null
       })
     }
 
     function cancelReq() {
-      cancel('Operation canceled by the user.')
+      if (typeof cancel === 'function') {
+        cancel('Operation canceled by the user.')
+      }
+      
     }
   </script>
 </body>

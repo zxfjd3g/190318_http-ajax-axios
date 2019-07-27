@@ -31,9 +31,10 @@
     })
 
     axios.interceptors.response.use(response => {
-      axiosCancel = null
+      cancel = null
       return response
     }, error => {
+      cancel = null
       if (axios.isCancel(error)) {
         console.log(response.config.url + ' Request canceled', error.message)
         return new Promise(() => {})

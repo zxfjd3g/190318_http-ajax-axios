@@ -56,6 +56,7 @@
         setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
         return JSON.stringify(data)
     响应转换器: 将响应体json字符串解析为js对象或数组的函数
+        response.data = JSON.parse(response.data)
     
 ### 10). response的整体结构
     {

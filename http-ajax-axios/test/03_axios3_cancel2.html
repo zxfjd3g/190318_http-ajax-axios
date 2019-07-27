@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>取消上一个未完成请求</title>
 </head>
 <body>
   <button onclick="getProducts1()">获取商品列表1</button><br>
@@ -33,6 +33,7 @@
         } else {
           console.log('products1 Request error', error.message)
         }
+        cancel = null
       })
     }
 
@@ -52,6 +53,7 @@
         } else {
           console.log('products2 Request error', error.message)
         }
+        cancel = null
       })
     }
 
