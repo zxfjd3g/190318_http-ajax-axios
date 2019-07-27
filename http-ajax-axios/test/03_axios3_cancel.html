@@ -14,29 +14,65 @@
   <script src="https://cdn.bootcss.com/axios/0.19.0/axios.js"></script>
   <script>
 
+    const CancelToken = axios.CancelToken
+    let cancel
+
     function getProducts1() {
+
+      if (typeof cancel === 'function') {
+        cancel('请求products1前取消请求')
+      }
+
       axios({
         url: 'http://localhost:4000/products1',
-        
+        cancelToken: new CancelToken((c) => { // c: 用于取消请求的函数
+          // 将取消请求的函数保存到外部, 用于将来调用它取消请求
+          cancel = c
+        })
       }).then(response => {
+        cancel = null
         console.log('products1 success', response.data)
-      }).catch(error => {
-        console.log('products1 Request error', error.message)
+      }).catch(error => { // cancel
+        if (axios.isCancel(error)) {
+          console.log('product1 request canceled', error.message)
+        } else {
+           cancel = null
+           console.log('products1 Request error', error.message)
+        }
       })
     }
 
     function getProducts2() {
+      if (typeof cancel === 'function') {
+        cancel('请求products2前取消请求')
+      }
       axios({
         url: 'http://localhost:4000/products2',
+        cancelToken: new CancelToken((c) => { // c: 用于取消请求的函数
+          // 将取消请求的函数保存到外部, 用于将来调用它取消请求
+          cancel = c
+        })
       }).then(response => {
+        cancel = null
         console.log('products2 success', response.data)
       }).catch(error => {
-        console.log('products2 Request error', error.message)
+        if (axios.isCancel(error)) {
+          console.log('product1 request canceled', error.message)
+        } else {
+          cancel = null
+          console.log('products1 Request error', error.message)
+        }
       })
     }
 
     function cancelReq() {
-      alert('取消请求')
+      // alert('取消请求')
+      if (typeof cancel === 'function') {
+        cancel('我要取消请求')
+      } else {
+        console.log("请求已经完成了")
+      }
+      
     }
   </script>
 </body>

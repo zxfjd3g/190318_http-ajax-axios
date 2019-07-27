@@ -20,6 +20,15 @@
       解决: 创建2个新axios, 每个都有自己特有的配置, 分别应用到不同要求的接口请求中
   */
 
+  axios.get = function (url, params, config) {
+    config = config || {}
+    config.params = params || {}
+    return axios({
+      url,
+      config
+    })
+  }
+
   axios.defaults.baseURL = 'http://localhost:4000'
 
   axios({

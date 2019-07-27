@@ -61,11 +61,11 @@
 ## 10. 使用XHR封装一个发ajax请求的通用函数
   函数的返回值为promise, 成功的结果为response, 异常的结果为error
   能处理多种类型的请求: GET/POST/PUT/DELETE
-  函数的参数为一个配置对象
+  函数的参数为一个配置对象: url/method/params/data
   响应json数据自动解析为了js
 
 ## 11. axios的特点
-    基本promise的封装XHR的异步ajax请求库
+    基于promise的封装XHR的异步ajax请求库
     浏览器端/node端都可以使用
     支持请求／响应拦截器
     支持请求取消

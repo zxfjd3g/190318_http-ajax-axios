@@ -24,6 +24,7 @@
         cancel('终止请求'); //取消请求
       }
 
+      // 配置当前请求的cancelToken, 保存对应的cancel函数
       config.cancelToken = new CancelToken(function executor(c) {
         cancel = c;
       });
@@ -34,12 +35,14 @@
       cancel = null
       return response
     }, error => {
-      cancel = null
       if (axios.isCancel(error)) {
         console.log(response.config.url + ' Request canceled', error.message)
         return new Promise(() => {})
+      } else {
+        cancel = null
+        return Promise.reject(error)
       }
-      return Promise.reject(error)
+      
     })
 
     function getProducts1() {
@@ -63,7 +66,7 @@
     }
 
     function cancelReq() {
-      source.cancel('Operation canceled by the user.')
+      cancel && cancel('Operation canceled by the user.')
     }
   </script>
 </body>
